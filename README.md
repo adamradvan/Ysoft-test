@@ -1,5 +1,5 @@
 # Y Soft
-Initial test for joining Y soft ARUR program
+Initial test for joining Ysoft ARUR program
 
 ### Create Python 3 application:
 
