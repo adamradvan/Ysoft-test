@@ -4,9 +4,7 @@ import json
 import string
 
 
-def parse_arguments():
-    print(sys.argv)
-
+def parse_validate_arguments():
     if len(sys.argv) != 5:
         print("Provide 4 arguments in this order:\n"
               "name of user, name of printer, path to input text file, path to output JSON file. ")
@@ -27,24 +25,35 @@ def parse_arguments():
     parse_data_from_file(user, printer, input_file, output_file)
 
 
-def write_JSON_file(user, printer, output_file, data):
-    with open(output_file, 'w') as JSON_file:
-        json_dict = {'userName': user, 'printerName': printer, 'data': data}
-        json.dump(json_dict, JSON_file, ensure_ascii=False, indent=2)
+def parse_data_from_file(user, printer, input_file, output_file):
+    try:
+        with open(input_file) as file:
+            data = file.read()
+            write_json_file(user, printer, output_file, data)
+            print(get_lower_ascii_data(data))
+    except PermissionError:
+        print("Insufficient access right for file {}".format(input_file))
+        sys.exit()
 
 
-def print_lower_ascii(data):
+def write_json_file(user, printer, output_file, data):
+    try:
+        with open(output_file, 'w') as JSON_file:
+            json_dict = {'userName': user, 'printerName': printer, 'data': data}
+            json.dump(json_dict, JSON_file, ensure_ascii=False, indent=2)
+    except PermissionError:
+        print("Insufficient access right for file {}".format(output_file))
+        sys.exit()
+
+
+def get_lower_ascii_data(data):
+    output = ""
     for letter in string.ascii_lowercase:
         letter_count = data.count(letter)
         if letter_count > 0:
-            print("{}:{}".format(letter, letter_count))
+            output += ("{}: {}\n".format(letter, letter_count))
+    return output
 
 
-def parse_data_from_file(user, printer, input_file, output_file):
-    with open(input_file) as file:
-        data = file.read()
-        write_JSON_file(user, printer, output_file, data)
-        print_lower_ascii(data)
-
-
-parse_arguments()
+if __name__ == '__main__':
+    parse_validate_arguments()
