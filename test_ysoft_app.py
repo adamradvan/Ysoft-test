@@ -91,6 +91,9 @@ class TestWriteJSONFile(unittest.TestCase):
         write_json_file(self.user, self.printer, self.output_file, self.data)
         with open(self.output_file) as f:
             json_from_file = json.load(f)
+            self.assertIn('userName', json_from_file)
+            self.assertIn('printerName', json_from_file)
+            self.assertIn('data', json_from_file)
             self.assertEqual(self.user, json_from_file['userName'])
             self.assertEqual(self.printer, json_from_file['printerName'])
             self.assertEqual(self.data, json_from_file['data'])
