@@ -4,7 +4,7 @@ import json
 import string
 
 
-def parse_validate_arguments():
+def parse_arguments():
     if len(sys.argv) != 5:
         print("Provide 4 arguments in this order:\n"
               "name of user, name of printer, path to input text file, path to output JSON file. ")
@@ -12,6 +12,11 @@ def parse_validate_arguments():
 
     user, printer, input_file, output_file = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
 
+    validate_arguments(user, printer, input_file, output_file)
+    parse_data_from_file(user, printer, input_file, output_file)
+
+
+def validate_arguments(user, printer, input_file, output_file):
     if not user or not printer:
         print("Provide non-empty names for user and printer")
         sys.exit()
@@ -22,8 +27,6 @@ def parse_validate_arguments():
         print("Provide valid files")
         sys.exit()
 
-    parse_data_from_file(user, printer, input_file, output_file)
-
 
 def parse_data_from_file(user, printer, input_file, output_file):
     try:
@@ -33,6 +36,9 @@ def parse_data_from_file(user, printer, input_file, output_file):
             print(get_lower_ascii_data(data))
     except PermissionError:
         print("Insufficient access right for file {}".format(input_file))
+        sys.exit()
+    except OSError as err:
+        print("I/O failure: {}".format(err))
         sys.exit()
 
 
@@ -56,4 +62,4 @@ def get_lower_ascii_data(data):
 
 
 if __name__ == '__main__':
-    parse_validate_arguments()
+    parse_arguments()
