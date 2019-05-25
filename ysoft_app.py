@@ -7,7 +7,7 @@ import string
 def parse_arguments():
     if len(sys.argv) != 5:
         print("Provide 4 arguments in this order:\n"
-              "name of user, name of printer, path to input text file, path to output JSON file. ")
+              "[name of user], [name of printer], [path to input text file], [path to output JSON file]")
         sys.exit()
 
     user, printer, input_file, output_file = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
@@ -21,10 +21,12 @@ def validate_arguments(user, printer, input_file, output_file):
         print("Provide non-empty names for user and printer")
         sys.exit()
 
-    if not (os.path.isfile(input_file) and
-            os.path.isfile(output_file) and
-            os.path.split(output_file)[1].lower().endswith('.json')):
-        print("Provide valid files")
+    if not (os.path.isfile(input_file)):
+        print("Provide valid valid path to input file")
+        sys.exit()
+
+    if not os.path.split(output_file)[1].lower().endswith('.json'):
+        print("Provide valid path to .json file")
         sys.exit()
 
 
